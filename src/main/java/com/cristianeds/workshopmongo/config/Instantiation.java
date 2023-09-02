@@ -9,6 +9,7 @@ import org.springframework.context.annotation.Configuration;
 
 import com.cristianeds.workshopmongo.domain.Post;
 import com.cristianeds.workshopmongo.domain.User;
+import com.cristianeds.workshopmongo.dto.AuthorDTO;
 import com.cristianeds.workshopmongo.repository.PostRepository;
 import com.cristianeds.workshopmongo.repository.UserRepository;
 
@@ -26,15 +27,20 @@ public class Instantiation implements CommandLineRunner{
 	@Override
 	public void run(String... args) throws Exception {
 		repository.deleteAll();
+		postRepository.deleteAll();
 		User juliaUser = new User(null, "Julia Ana", "juliana@gmail.com");
 		User joaoUser = new User(null, "Joao Carlos", "joao.carlos@gmail.com");
 		User taldoUser = new User(null, "Taldo Jr", "taldo.jr@gmail.com");
 		
-		Post post1 = new Post(null, sdf.parse("09/09/2023"), "Partiu viagem", "Vou viajar para SP", juliaUser);
-		Post post2 = new Post(null, sdf.parse("10/09/2023"), "Bom dia", "Cheguei em SP", juliaUser);
+		repository.saveAll(Arrays.asList(juliaUser,joaoUser,taldoUser));
+		
+		
+		
+		Post post1 = new Post(null, sdf.parse("09/09/2023"), "Partiu viagem", "Vou viajar para SP", new AuthorDTO(juliaUser));
+		Post post2 = new Post(null, sdf.parse("10/09/2023"), "Bom dia", "Cheguei em SP", new AuthorDTO(juliaUser));
 		
 		postRepository.saveAll(Arrays.asList(post1,post2));
-		repository.saveAll(Arrays.asList(juliaUser,joaoUser,taldoUser));
+		
 		
 		
 		
