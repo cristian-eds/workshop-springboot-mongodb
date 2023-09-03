@@ -1,21 +1,28 @@
 package com.cristianeds.workshopmongo.domain;
 
 import java.io.Serializable;
+import java.util.ArrayList;
+import java.util.List;
 
 import org.springframework.data.annotation.Id;
+import org.springframework.data.mongodb.core.mapping.DBRef;
 import org.springframework.data.mongodb.core.mapping.Document;
 
 @Document
-public class User implements Serializable{
-	
+public class User implements Serializable {
+
 	private static final long serialVersionUID = 1L;
-	
+
 	@Id
 	private String id;
 	private String name;
 	private String email;
 	
-	public User() {}
+	@DBRef(lazy = true)
+	private List<Post> posts = new ArrayList<>();
+
+	public User() {
+	}
 
 	public User(String id, String name, String email) {
 		super();
@@ -48,6 +55,14 @@ public class User implements Serializable{
 		this.email = email;
 	}
 
+	public List<Post> getPosts() {
+		return posts;
+	}
+
+	public void setPosts(List<Post> posts) {
+		this.posts = posts;
+	}
+
 	@Override
 	public int hashCode() {
 		final int prime = 31;
@@ -72,6 +87,5 @@ public class User implements Serializable{
 			return false;
 		return true;
 	}
-	
-	
+
 }
