@@ -10,17 +10,18 @@ import org.springframework.context.annotation.Configuration;
 import com.cristianeds.workshopmongo.domain.Post;
 import com.cristianeds.workshopmongo.domain.User;
 import com.cristianeds.workshopmongo.dto.AuthorDTO;
+import com.cristianeds.workshopmongo.dto.CommentDTO;
 import com.cristianeds.workshopmongo.repository.PostRepository;
 import com.cristianeds.workshopmongo.repository.UserRepository;
 
 @Configuration
-public class Instantiation implements CommandLineRunner{
-	
+public class Instantiation implements CommandLineRunner {
+
 	SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy");
-	
+
 	@Autowired
 	private UserRepository repository;
-	
+
 	@Autowired
 	private PostRepository postRepository;
 
@@ -31,22 +32,25 @@ public class Instantiation implements CommandLineRunner{
 		User juliaUser = new User(null, "Julia Ana", "juliana@gmail.com");
 		User joaoUser = new User(null, "Joao Carlos", "joao.carlos@gmail.com");
 		User taldoUser = new User(null, "Taldo Jr", "taldo.jr@gmail.com");
-		
-		repository.saveAll(Arrays.asList(juliaUser,joaoUser,taldoUser));
-		
-		
-		
-		Post post1 = new Post(null, sdf.parse("09/09/2023"), "Partiu viagem", "Vou viajar para SP", new AuthorDTO(juliaUser));
+
+		repository.saveAll(Arrays.asList(juliaUser, joaoUser, taldoUser));
+
+		Post post1 = new Post(null, sdf.parse("09/09/2023"), "Partiu viagem", "Vou viajar para SP",
+				new AuthorDTO(juliaUser));
 		Post post2 = new Post(null, sdf.parse("10/09/2023"), "Bom dia", "Cheguei em SP", new AuthorDTO(juliaUser));
+
+		CommentDTO comment1 = new CommentDTO("Boa viagem!", sdf.parse("03/09/2023"), new AuthorDTO(taldoUser));
+		CommentDTO comment2 = new CommentDTO("Aproveite", sdf.parse("03/09/2023"), new AuthorDTO(taldoUser));
+		CommentDTO comment3 = new CommentDTO("Tenha um bom dia!", sdf.parse("03/09/2023"), new AuthorDTO(joaoUser));
 		
-		postRepository.saveAll(Arrays.asList(post1,post2));
+		post1.getComments().addAll(Arrays.asList(comment1,comment2));
+		post2.getComments().addAll(Arrays.asList(comment3));
 		
-		juliaUser.getPosts().addAll(Arrays.asList(post1,post2));
+		postRepository.saveAll(Arrays.asList(post1, post2));
+
+		juliaUser.getPosts().addAll(Arrays.asList(post1, post2));
 		repository.save(juliaUser);
-		
-		
-		
-		
+
 	}
-	
+
 }
